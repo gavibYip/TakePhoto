@@ -36,7 +36,7 @@ public class SimpleActivity extends TakePhotoActivity {
     private CustomHelper customHelper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View contentView = LayoutInflater.from(this).inflate(R.layout.common_layout, null);
         setContentView(contentView);

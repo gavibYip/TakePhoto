@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.devio.takephoto.model.InvokeParam;
-import org.devio.takephoto.permission.PermissionManager;
-import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 import org.devio.takephoto.R;
+import org.devio.takephoto.model.InvokeParam;
 import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.permission.InvokeListener;
+import org.devio.takephoto.permission.PermissionManager;
+import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 
 /**
  * 继承这个类来让Activity获取拍照的能力<br>
@@ -28,19 +28,19 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
     private InvokeParam invokeParam;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         getTakePhoto().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         getTakePhoto().onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         getTakePhoto().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -7,13 +7,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.widget.Toast;
 
-import com.darsh.multipleimageselect.helpers.Constants;
-import com.darsh.multipleimageselect.models.Image;
 import org.devio.takephoto.compress.CompressImage;
 import org.devio.takephoto.compress.CompressImageImpl;
+import org.devio.takephoto.helpers.Constants;
+import org.devio.takephoto.model.Image;
 import org.devio.takephoto.model.MultipleCrop;
 import org.devio.takephoto.model.TException;
 import org.devio.takephoto.model.TExceptionType;
