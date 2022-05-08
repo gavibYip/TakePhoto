@@ -1,19 +1,18 @@
-package org.devio.simple;
+package org.devio.simple
 
-import android.net.Uri;
-import android.os.Environment;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-
-import org.devio.takephoto.app.TakePhoto;
-import org.devio.takephoto.compress.CompressConfig;
-import org.devio.takephoto.model.CropOptions;
-import org.devio.takephoto.model.LubanOptions;
-import org.devio.takephoto.model.TakePhotoOptions;
-
-import java.io.File;
-
+import android.net.Uri
+import android.widget.RadioGroup
+import android.widget.EditText
+import org.devio.simple.R
+import org.devio.takephoto.app.TakePhoto
+import android.os.Environment
+import android.view.View
+import org.devio.takephoto.model.TakePhotoOptions
+import org.devio.takephoto.compress.CompressConfig
+import org.devio.takephoto.model.LubanOptions
+import org.devio.takephoto.model.CropOptions
+import org.devio.simple.CustomHelper
+import java.io.File
 
 /**
  * - 支持通过相机拍照获取图片
@@ -35,145 +34,153 @@ import java.io.File;
  * GitHub:https://github.com/crazycodeboy
  * Email:crazycodeboy@gmail.com
  */
-public class CustomHelper {
-    private View rootView;
-    private RadioGroup rgCrop, rgCompress, rgFrom, rgCropSize, rgCropTool, rgShowProgressBar, rgPickTool, rgCompressTool, rgCorrectTool,
-        rgRawFile;
-    private EditText etCropHeight, etCropWidth, etLimit, etSize, etHeightPx, etWidthPx;
-
-    public static CustomHelper of(View rootView) {
-        return new CustomHelper(rootView);
+class CustomHelper private constructor(private val rootView: View) {
+    private var rgCrop: RadioGroup? = null
+    private var rgCompress: RadioGroup? = null
+    private var rgFrom: RadioGroup? = null
+    private var rgCropSize: RadioGroup? = null
+    private var rgCropTool: RadioGroup? = null
+    private var rgShowProgressBar: RadioGroup? = null
+    private var rgPickTool: RadioGroup? = null
+    private var rgCompressTool: RadioGroup? = null
+    private var rgCorrectTool: RadioGroup? = null
+    private var rgRawFile: RadioGroup? = null
+    private var etCropHeight: EditText? = null
+    private var etCropWidth: EditText? = null
+    private var etLimit: EditText? = null
+    private var etSize: EditText? = null
+    private var etHeightPx: EditText? = null
+    private var etWidthPx: EditText? = null
+    private fun init() {
+        rgCrop = rootView.findViewById<View>(R.id.rgCrop) as RadioGroup
+        rgCompress = rootView.findViewById<View>(R.id.rgCompress) as RadioGroup
+        rgCompressTool = rootView.findViewById<View>(R.id.rgCompressTool) as RadioGroup
+        rgCropSize = rootView.findViewById<View>(R.id.rgCropSize) as RadioGroup
+        rgFrom = rootView.findViewById<View>(R.id.rgFrom) as RadioGroup
+        rgPickTool = rootView.findViewById<View>(R.id.rgPickTool) as RadioGroup
+        rgRawFile = rootView.findViewById<View>(R.id.rgRawFile) as RadioGroup
+        rgCorrectTool = rootView.findViewById<View>(R.id.rgCorrectTool) as RadioGroup
+        rgShowProgressBar = rootView.findViewById<View>(R.id.rgShowProgressBar) as RadioGroup
+        rgCropTool = rootView.findViewById<View>(R.id.rgCropTool) as RadioGroup
+        etCropHeight = rootView.findViewById<View>(R.id.etCropHeight) as EditText
+        etCropWidth = rootView.findViewById<View>(R.id.etCropWidth) as EditText
+        etLimit = rootView.findViewById<View>(R.id.etLimit) as EditText
+        etSize = rootView.findViewById<View>(R.id.etSize) as EditText
+        etHeightPx = rootView.findViewById<View>(R.id.etHeightPx) as EditText
+        etWidthPx = rootView.findViewById<View>(R.id.etWidthPx) as EditText
     }
 
-    private CustomHelper(View rootView) {
-        this.rootView = rootView;
-        init();
-    }
-
-    private void init() {
-        rgCrop = (RadioGroup) rootView.findViewById(R.id.rgCrop);
-        rgCompress = (RadioGroup) rootView.findViewById(R.id.rgCompress);
-        rgCompressTool = (RadioGroup) rootView.findViewById(R.id.rgCompressTool);
-        rgCropSize = (RadioGroup) rootView.findViewById(R.id.rgCropSize);
-        rgFrom = (RadioGroup) rootView.findViewById(R.id.rgFrom);
-        rgPickTool = (RadioGroup) rootView.findViewById(R.id.rgPickTool);
-        rgRawFile = (RadioGroup) rootView.findViewById(R.id.rgRawFile);
-        rgCorrectTool = (RadioGroup) rootView.findViewById(R.id.rgCorrectTool);
-        rgShowProgressBar = (RadioGroup) rootView.findViewById(R.id.rgShowProgressBar);
-        rgCropTool = (RadioGroup) rootView.findViewById(R.id.rgCropTool);
-        etCropHeight = (EditText) rootView.findViewById(R.id.etCropHeight);
-        etCropWidth = (EditText) rootView.findViewById(R.id.etCropWidth);
-        etLimit = (EditText) rootView.findViewById(R.id.etLimit);
-        etSize = (EditText) rootView.findViewById(R.id.etSize);
-        etHeightPx = (EditText) rootView.findViewById(R.id.etHeightPx);
-        etWidthPx = (EditText) rootView.findViewById(R.id.etWidthPx);
-
-
-
-    }
-
-    public void onClick(View view, TakePhoto takePhoto) {
-        File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+    fun onClick(view: View, takePhoto: TakePhoto) {
+        val file = File(
+            Environment.getExternalStorageDirectory(),
+            "/temp/" + System.currentTimeMillis() + ".jpg"
+        )
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
         }
-        Uri imageUri = Uri.fromFile(file);
-
-        configCompress(takePhoto);
-        configTakePhotoOption(takePhoto);
-        switch (view.getId()) {
-            case R.id.btnPickBySelect:
-                int limit = Integer.parseInt(etLimit.getText().toString());
+        val imageUri = Uri.fromFile(file)
+        configCompress(takePhoto)
+        configTakePhotoOption(takePhoto)
+        when (view.id) {
+            R.id.btnPickBySelect -> {
+                val limit = etLimit!!.text.toString().toInt()
                 if (limit > 1) {
-                    if (rgCrop.getCheckedRadioButtonId() == R.id.rbCropYes) {
-                        takePhoto.onPickMultipleWithCrop(limit, getCropOptions());
+                    if (rgCrop!!.checkedRadioButtonId == R.id.rbCropYes) {
+                        takePhoto.onPickMultipleWithCrop(limit, cropOptions)
                     } else {
-                        takePhoto.onPickMultiple(limit);
+                        takePhoto.onPickMultiple(limit)
                     }
-                    return;
+                    return
                 }
-                if (rgFrom.getCheckedRadioButtonId() == R.id.rbFile) {
-                    if (rgCrop.getCheckedRadioButtonId() == R.id.rbCropYes) {
-                        takePhoto.onPickFromDocumentsWithCrop(imageUri, getCropOptions());
+                if (rgFrom!!.checkedRadioButtonId == R.id.rbFile) {
+                    if (rgCrop!!.checkedRadioButtonId == R.id.rbCropYes) {
+                        takePhoto.onPickFromDocumentsWithCrop(imageUri, cropOptions)
                     } else {
-                        takePhoto.onPickFromDocuments();
+                        takePhoto.onPickFromDocuments()
                     }
-                    return;
+                    return
                 } else {
-                    if (rgCrop.getCheckedRadioButtonId() == R.id.rbCropYes) {
-                        takePhoto.onPickFromGalleryWithCrop(imageUri, getCropOptions());
+                    if (rgCrop!!.checkedRadioButtonId == R.id.rbCropYes) {
+                        takePhoto.onPickFromGalleryWithCrop(imageUri, cropOptions)
                     } else {
-                        takePhoto.onPickFromGallery();
+                        takePhoto.onPickFromGallery()
                     }
                 }
-                break;
-            case R.id.btnPickByTake:
-                if (rgCrop.getCheckedRadioButtonId() == R.id.rbCropYes) {
-                    takePhoto.onPickFromCaptureWithCrop(imageUri, getCropOptions());
-                } else {
-                    takePhoto.onPickFromCapture(imageUri);
-                }
-                break;
-            default:
-                break;
+            }
+            R.id.btnPickByTake -> if (rgCrop!!.checkedRadioButtonId == R.id.rbCropYes) {
+                takePhoto.onPickFromCaptureWithCrop(imageUri, cropOptions)
+            } else {
+                takePhoto.onPickFromCapture(imageUri)
+            }
+            else -> {}
         }
     }
 
-    private void configTakePhotoOption(TakePhoto takePhoto) {
-        TakePhotoOptions.Builder builder = new TakePhotoOptions.Builder();
-        if (rgPickTool.getCheckedRadioButtonId() == R.id.rbPickWithOwn) {
-            builder.setWithOwnGallery(true);
+    private fun configTakePhotoOption(takePhoto: TakePhoto) {
+        val builder = TakePhotoOptions.Builder()
+        if (rgPickTool!!.checkedRadioButtonId == R.id.rbPickWithOwn) {
+            builder.setWithOwnGallery(true)
         }
-        if (rgCorrectTool.getCheckedRadioButtonId() == R.id.rbCorrectYes) {
-            builder.setCorrectImage(true);
+        if (rgCorrectTool!!.checkedRadioButtonId == R.id.rbCorrectYes) {
+            builder.setCorrectImage(true)
         }
-        takePhoto.setTakePhotoOptions(builder.create());
-
+        takePhoto.setTakePhotoOptions(builder.create())
     }
 
-    private void configCompress(TakePhoto takePhoto) {
-        if (rgCompress.getCheckedRadioButtonId() != R.id.rbCompressYes) {
-            takePhoto.onEnableCompress(null, false);
-            return;
+    private fun configCompress(takePhoto: TakePhoto) {
+        if (rgCompress!!.checkedRadioButtonId != R.id.rbCompressYes) {
+            takePhoto.onEnableCompress(null, false)
+            return
         }
-        int maxSize = Integer.parseInt(etSize.getText().toString());
-        int width = Integer.parseInt(etCropWidth.getText().toString());
-        int height = Integer.parseInt(etHeightPx.getText().toString());
-        boolean showProgressBar = rgShowProgressBar.getCheckedRadioButtonId() == R.id.rbShowYes ? true : false;
-        boolean enableRawFile = rgRawFile.getCheckedRadioButtonId() == R.id.rbRawYes ? true : false;
-        CompressConfig config;
-        if (rgCompressTool.getCheckedRadioButtonId() == R.id.rbCompressWithOwn) {
-            config = new CompressConfig.Builder().setMaxSize(maxSize)
-                .setMaxPixel(width >= height ? width : height)
+        val maxSize = etSize!!.text.toString().toInt()
+        val width = etCropWidth!!.text.toString().toInt()
+        val height = etHeightPx!!.text.toString().toInt()
+        val showProgressBar =
+            rgShowProgressBar!!.checkedRadioButtonId == R.id.rbShowYes
+        val enableRawFile = rgRawFile!!.checkedRadioButtonId == R.id.rbRawYes
+        val config: CompressConfig
+        if (rgCompressTool!!.checkedRadioButtonId == R.id.rbCompressWithOwn) {
+            config = CompressConfig.Builder().setMaxSize(maxSize)
+                .setMaxPixel(if (width >= height) width else height)
                 .enableReserveRaw(enableRawFile)
-                .create();
+                .create()
         } else {
-            LubanOptions option = new LubanOptions.Builder().setMaxHeight(height).setMaxWidth(width).setMaxSize(maxSize).create();
-            config = CompressConfig.ofLuban(option);
-            config.enableReserveRaw(enableRawFile);
+            val option =
+                LubanOptions.Builder().setMaxHeight(height).setMaxWidth(width).setMaxSize(maxSize)
+                    .create()
+            config = CompressConfig.ofLuban(option)
+            config.enableReserveRaw(enableRawFile)
         }
-        takePhoto.onEnableCompress(config, showProgressBar);
-
-
+        takePhoto.onEnableCompress(config, showProgressBar)
     }
 
-    private CropOptions getCropOptions() {
-        if (rgCrop.getCheckedRadioButtonId() != R.id.rbCropYes) {
-            return null;
+    private val cropOptions: CropOptions?
+        get() {
+            if (rgCrop!!.checkedRadioButtonId != R.id.rbCropYes) {
+                return null
+            }
+            val height = etCropHeight!!.text.toString().toInt()
+            val width = etCropWidth!!.text.toString().toInt()
+            val withWonCrop =
+                rgCropTool!!.checkedRadioButtonId == R.id.rbCropOwn
+            val builder = CropOptions.Builder()
+            if (rgCropSize!!.checkedRadioButtonId == R.id.rbAspect) {
+                builder.setAspectX(width).setAspectY(height)
+            } else {
+                builder.setOutputX(width).setOutputY(height)
+            }
+            builder.setWithOwnCrop(withWonCrop)
+            return builder.create()
         }
-        int height = Integer.parseInt(etCropHeight.getText().toString());
-        int width = Integer.parseInt(etCropWidth.getText().toString());
-        boolean withWonCrop = rgCropTool.getCheckedRadioButtonId() == R.id.rbCropOwn ? true : false;
 
-        CropOptions.Builder builder = new CropOptions.Builder();
-
-        if (rgCropSize.getCheckedRadioButtonId() == R.id.rbAspect) {
-            builder.setAspectX(width).setAspectY(height);
-        } else {
-            builder.setOutputX(width).setOutputY(height);
+    companion object {
+        @JvmStatic
+        fun of(rootView: View): CustomHelper {
+            return CustomHelper(rootView)
         }
-        builder.setWithOwnCrop(withWonCrop);
-        return builder.create();
     }
 
+    init {
+        init()
+    }
 }
