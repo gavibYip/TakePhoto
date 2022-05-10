@@ -9,7 +9,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'io.github.steinshei'  //sonatype平台创建的groupId
                 artifactId = project.name
-                version = '1.0.1'  //库版本名
+                version = '1.0.2'  //库版本名
                 project.ext["signing.keyId"] = "BB6F5DB4"  //GPG指纹后8位
                 project.ext["signing.password"] = "myxixia12"  //GPG密码
                 project.ext["signing.secretKeyRingFile"] = "/Users/gavin/gpg_key/pubring.gpg" //GPG私钥
