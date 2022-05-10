@@ -55,7 +55,12 @@ public class TUriParse {
      */
     public static Uri getTempUri(Context context) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        File file = new File(Environment.getExternalStorageDirectory(), "/images/" + timeStamp + ".jpg");
+        //适配Android 11
+        File root = context.getExternalFilesDir(null);
+        if (root == null) {
+            root = context.getFilesDir();
+        }
+        File file = new File(root, "/images/" + timeStamp + ".jpg");
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }

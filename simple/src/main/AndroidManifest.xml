@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.devio.simple">
 
+    <!--Android 11使用相机需要适配Android R包可见性 -->
+    <queries package="${applicationId}">
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE">
+
+            </action>
+        </intent>
+        <intent>
+            <action android:name="android.media.action.ACTION_VIDEO_CAPTURE">
+
+            </action>
+        </intent>
+    </queries>
+
     <application
         android:name=".SimpleApplication"
         android:allowBackup="true"
