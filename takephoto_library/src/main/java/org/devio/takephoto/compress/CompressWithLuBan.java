@@ -2,6 +2,9 @@ package org.devio.takephoto.compress;
 
 import android.content.Context;
 
+import org.devio.takephoto.luban.Luban;
+import org.devio.takephoto.luban.OnCompressListener;
+import org.devio.takephoto.luban.OnMultiCompressListener;
 import org.devio.takephoto.model.LubanOptions;
 import org.devio.takephoto.model.TImage;
 
@@ -9,9 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.shaohui.advancedluban.Luban;
-import me.shaohui.advancedluban.OnCompressListener;
-import me.shaohui.advancedluban.OnMultiCompressListener;
 
 /**
  * 压缩照片,采用luban

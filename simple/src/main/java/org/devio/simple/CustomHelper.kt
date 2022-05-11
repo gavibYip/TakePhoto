@@ -1,17 +1,14 @@
 package org.devio.simple
 
 import android.net.Uri
-import android.widget.RadioGroup
-import android.widget.EditText
-import org.devio.simple.R
-import org.devio.takephoto.app.TakePhoto
-import android.os.Environment
 import android.view.View
-import org.devio.takephoto.model.TakePhotoOptions
+import android.widget.EditText
+import android.widget.RadioGroup
+import org.devio.takephoto.app.TakePhoto
 import org.devio.takephoto.compress.CompressConfig
-import org.devio.takephoto.model.LubanOptions
 import org.devio.takephoto.model.CropOptions
-import org.devio.simple.CustomHelper
+import org.devio.takephoto.model.LubanOptions
+import org.devio.takephoto.model.TakePhotoOptions
 import java.io.File
 
 /**
@@ -71,14 +68,20 @@ class CustomHelper private constructor(private val rootView: View) {
     }
 
     fun onClick(view: View, takePhoto: TakePhoto) {
-        val file = File(
-            Environment.getExternalStorageDirectory(),
+        //适配Android 11
+        var root = File(
+            rootView.context.getExternalFilesDir(null),
             "/temp/" + System.currentTimeMillis() + ".jpg"
         )
-        if (!file.parentFile.exists()) {
-            file.parentFile.mkdirs()
+        if (root == null) {
+            root = File(
+                rootView.context.filesDir, "/temp/" + System.currentTimeMillis() + ".jpg"
+            )
         }
-        val imageUri = Uri.fromFile(file)
+        if (!root.parentFile.exists()) {
+            root.parentFile.mkdirs()
+        }
+        val imageUri = Uri.fromFile(root)
         configCompress(takePhoto)
         configTakePhotoOption(takePhoto)
         when (view.id) {
